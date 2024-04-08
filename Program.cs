@@ -66,3 +66,127 @@ public class GameBoard
 
         return false;
     }
+
+    // Method to check if the board is full
+    public bool IsFull()
+    {
+        for (int col = 1; col <= Cols; col++)
+        {
+            if (board[1, col] == CellState.Empty)
+                return false;
+        }
+        return true;
+    }
+
+    // Method to check for a win condition
+    public bool CheckWin(CellState player, out int[] winningCombination, out string winType)
+    {
+        winningCombination = null;
+        winType = "";
+
+        // Check for horizontal win
+        for (int row = 1; row <= Rows; row++)
+        {
+            for (int col = 1; col <= Cols - 3; col++)
+            {
+                if (board[row, col] == player &&
+                    board[row, col + 1] == player &&
+                    board[row, col + 2] == player &&
+                    board[row, col + 3] == player)
+                {
+                    winningCombination = new int[] { row, col, row, col + 1, row, col + 2, row, col + 3 };
+                    winType = "horizontal";
+                    return true;
+                }
+            }
+        }
+
+        // Check for vertical win
+        for (int col = 1; col <= Cols; col++)
+        {
+            for (int row = 1; row <= Rows - 3; row++)
+            {
+                if (board[row, col] == player &&
+                    board[row + 1, col] == player &&
+                    board[row + 2, col] == player &&
+                    board[row + 3, col] == player)
+                {
+                    winningCombination = new int[] { row, col, row + 1, col, row + 2, col, row + 3, col };
+                    winType = "vertical";
+                    return true;
+                }
+            }
+        }
+
+        // Check for diagonal win (down-right)
+        for (int row = 1; row <= Rows - 3; row++)
+        {
+            for (int col = 1; col <= Cols - 3; col++)
+            {
+                if (board[row, col] == player &&
+                    board[row + 1, col + 1] == player &&
+                    board[row + 2, col + 2] == player &&
+                    board[row + 3, col + 3] == player)
+                {
+                    winningCombination = new int[] { row, col, row + 1, col + 1, row + 2, col + 2, row + 3, col + 3 };
+                    winType = "diagonal (down-right)";
+                    return true;
+                }
+            }
+        }
+
+        // Check for diagonal win (down-left)
+        for (int row = 1; row <= Rows - 3; row++)
+        {
+            for (int col = 4; col <= Cols; col++)
+            {
+                if (board[row, col] == player &&
+                    board[row + 1, col - 1] == player &&
+                    board[row + 2, col - 2] == player &&
+                    board[row + 3, col - 3] == player)
+                {
+                    winningCombination = new int[] { row, col, row + 1, col - 1, row + 2, col - 2, row + 3, col - 3 };
+                    winType = "diagonal (down-left)";
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    // Method to display the game board
+    public void DisplayBoard()
+    {
+        for (int row = 1; row <= Rows; row++)
+        {
+            for (int col = 1; col <= Cols; col++)
+            {
+                switch (board[row, col])
+                {
+                    case CellState.Empty:
+                        Console.Write("| ");
+                        break;
+                    case CellState.PlayerOne:
+                        Console.Write("|O");
+                        break;
+                    case CellState.PlayerTwo:
+                        Console.Write("|X");
+                        break;
+                }
+            }
+            Console.WriteLine("|");
+        }
+        Console.WriteLine("---------------");
+        Console.WriteLine(" 1 2 3 4 5 6 7 ");
+        Console.WriteLine("---------------");
+    }
+}
+
+// Class representing the Connect Four game
+public class ConnectFourGame
+{
+    private readonly GameBoard board;
+    private readonly Player[] players;
+    private int currentPlayerIndex;
+
