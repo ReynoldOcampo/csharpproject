@@ -190,3 +190,50 @@ public class ConnectFourGame
     private readonly Player[] players;
     private int currentPlayerIndex;
 
+    // Method to start and manage the game
+    public void Play()
+    {
+        Console.WriteLine("Welcome to Connect Four!");
+
+        while (true)
+        {
+            Console.Clear(); // Clear the console and display the game board
+            board.DisplayBoard();
+            int col;
+
+            Thread.Sleep(1000);
+
+            col = players[currentPlayerIndex].GetMove();// Get the current player's move
+
+            while (!board.MakeMove(col, players[currentPlayerIndex].Token)) // Handle case where column is full
+            {
+                Console.WriteLine("Column is full. Please choose another column.");
+                Thread.Sleep(1000);
+                col = players[currentPlayerIndex].GetMove();
+            }
+
+            int[] winningCombination; // Check for win or draw
+            string winType;
+            if (board.CheckWin(players[currentPlayerIndex].Token, out winningCombination, out winType))
+            {
+                Console.Clear(); // Display win message
+                board.DisplayBoard();
+                Console.WriteLine($"{players[currentPlayerIndex].Name} wins by {winType}!");
+                if (!PlayAgain()) break;// Ask if players want to play again
+                else board.ClearBoard(); // Reset the board if they do
+            }
+            else if (board.IsFull())
+            {
+                Console.Clear();
+                board.DisplayBoard();
+                Console.WriteLine("It's a draw!");// Display draw message
+                if (!PlayAgain()) break; // Ask if players want to play again
+                else board.ClearBoard();
+            }
+            else
+            {
+                currentPlayerIndex = (currentPlayerIndex + 1) % 2;// Switch to the next player
+            }
+        }
+    }
+
