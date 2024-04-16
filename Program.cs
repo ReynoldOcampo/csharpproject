@@ -236,4 +236,38 @@ public class ConnectFourGame
             }
         }
     }
+    // Method to ask if players want to play again
+    private bool PlayAgain()
+    {
+        Console.Write("Do you want to play again? (yes/no): ");
+        string input = Console.ReadLine().Trim().ToLower();
+        return input == "yes" || input == "y";
+    }
+}
+
+// Main program class
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        Console.WriteLine("Welcome to Connect Four Game");
+        Console.WriteLine("Click Enter to Start the Game");
+        Console.ReadLine();
+
+        // Get names of players
+        Console.Write("Enter Player 1 Name: ");
+        string player1Name = Console.ReadLine();
+
+        Console.Write("Enter Player 2 Name: ");
+        string player2Name = Console.ReadLine();
+
+        // Create player objects
+        Player player1 = new HumanPlayer(player1Name, CellState.PlayerOne);
+        Player player2 = new HumanPlayer(player2Name, CellState.PlayerTwo);
+
+        // Create game object and start the game
+        ConnectFourGame game = new ConnectFourGame(player1, player2);
+        game.Play();
+    }
+}
 
